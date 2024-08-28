@@ -1,0 +1,17 @@
+{
+	"name": "Ds_Sql_Users",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_SqlDB_Organizationchart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "employees"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

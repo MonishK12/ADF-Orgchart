@@ -1,0 +1,17 @@
+{
+	"name": "Ds_Sql_Admin",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_SqlDB_Organizationchart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "admin"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

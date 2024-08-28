@@ -1,0 +1,16 @@
+{
+	"name": "Ds_Mongo_Users",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_MongoDb_Orgchart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MongoDbAtlasCollection",
+		"schema": [],
+		"typeProperties": {
+			"collection": "Users"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

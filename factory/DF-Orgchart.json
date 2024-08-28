@@ -1,0 +1,9 @@
+{
+	"name": "DF-Orgchart",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6170cc47-9c8a-4cf0-a32c-a60c6d0ddef5",
+		"tenantId": "2800c0a0-70e9-49be-8733-faeaa6aced99"
+	}
+}
