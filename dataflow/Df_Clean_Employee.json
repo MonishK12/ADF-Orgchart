@@ -1,0 +1,52 @@
+{
+	"name": "Df_Clean_Employee",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Sql_Users",
+						"type": "DatasetReference"
+					},
+					"name": "SqlEmployee"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Sql_Clean_Employee",
+						"type": "DatasetReference"
+					},
+					"name": "CleanData"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          name as string,",
+				"          email as string,",
+				"          password as string,",
+				"          role as string,",
+				"          department as string,",
+				"          reportsTo as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SqlEmployee",
+				"SqlEmployee sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> CleanData"
+			]
+		}
+	}
+}

@@ -6,8 +6,6 @@
 				"name": "Users",
 				"description": "Users data from mongo to Sql",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -197,6 +195,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "Staging"
+		},
 		"annotations": [],
 		"lastPublishTime": "2024-08-28T09:55:21Z"
 	},

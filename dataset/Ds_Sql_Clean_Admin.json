@@ -1,0 +1,16 @@
+{
+	"name": "Ds_Sql_Clean_Admin",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_SqlDB_Organizationchart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "prep",
+			"table": "cleanAdmin"
+		}
+	}
+}
