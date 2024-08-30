@@ -21,7 +21,14 @@
 					"name": "CleanData"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "RemoveDup"
+				},
+				{
+					"name": "alterRow1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id as string,",
@@ -36,7 +43,9 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> SqlEmployee",
-				"SqlEmployee sink(allowSchemaDrift: true,",
+				"SqlEmployee aggregate(groupBy(email)) ~> RemoveDup",
+				"RemoveDup alterRow(deleteIf(isNull(email))) ~> alterRow1",
+				"alterRow1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
