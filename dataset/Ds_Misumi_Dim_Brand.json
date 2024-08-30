@@ -1,5 +1,5 @@
 {
-	"name": "Ds_Mismui_Dim_Brand",
+	"name": "Ds_Misumi_Dim_Brand",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Ls_SqlDB_Organizationchart",

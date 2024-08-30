@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Ds_Mismui_CleanData",
+						"referenceName": "Ds_Misumi_CleanData",
 						"type": "DatasetReference"
 					},
 					"name": "source1"

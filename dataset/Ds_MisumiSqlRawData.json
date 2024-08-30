@@ -1,5 +1,5 @@
 {
-	"name": "Ds_MisumSqlRawData",
+	"name": "Ds_MisumiSqlRawData",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Ls_SqlDB_Organizationchart",

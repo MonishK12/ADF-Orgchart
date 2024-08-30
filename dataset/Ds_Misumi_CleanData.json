@@ -1,5 +1,5 @@
 {
-	"name": "Ds_Mismui_CleanData",
+	"name": "Ds_Misumi_CleanData",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Ls_SqlDB_Organizationchart",

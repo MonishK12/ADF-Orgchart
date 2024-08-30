@@ -1,5 +1,5 @@
 {
-	"name": "Df_Clean_Mismui",
+	"name": "Df_Clean_Misumi",
 	"properties": {
 		"folder": {
 			"name": "Assessment-2"
@@ -14,7 +14,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Ds_Mismui_CleanData",
+						"referenceName": "Ds_Misumi_CleanData",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
