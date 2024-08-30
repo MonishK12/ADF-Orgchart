@@ -1,0 +1,16 @@
+{
+	"name": "Ds_Mismui_CleanData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_SqlDB_Organizationchart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "prep",
+			"table": "MismuiCleanData"
+		}
+	}
+}
