@@ -23,9 +23,6 @@
 			],
 			"transformations": [
 				{
-					"name": "RemoveDup"
-				},
-				{
 					"name": "alterRow1"
 				}
 			],
@@ -43,8 +40,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> SqlEmployee",
-				"SqlEmployee aggregate(groupBy(email)) ~> RemoveDup",
-				"RemoveDup alterRow(deleteIf(isNull(email))) ~> alterRow1",
+				"SqlEmployee alterRow(deleteIf(isNull(email))) ~> alterRow1",
 				"alterRow1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",

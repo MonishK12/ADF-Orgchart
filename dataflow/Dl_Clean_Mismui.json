@@ -64,7 +64,7 @@
 				"source1 aggregate(groupBy(seriesCode),",
 				"     each(match(name!='seriesCode'), $$ = first($$))) ~> aggregate1",
 				"aggregate1 derive(minStandardUnitPrice = iifNull(minStandardUnitPrice, 0, minStandardUnitPrice),",
-				"          maxStandardUnitPrice = iifNull(mmaxStandardUnitPrice, 0, maxStandardUnitPrice)) ~> derivedColumn1",
+				"          maxStandardUnitPrice = iifNull(maxStandardUnitPrice, 0, maxStandardUnitPrice)) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
