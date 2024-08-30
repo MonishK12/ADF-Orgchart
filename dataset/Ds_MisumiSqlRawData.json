@@ -13,7 +13,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "raw",
-			"table": "MisumiProducts"
+			"table": "Products"
 		}
 	}
 }
