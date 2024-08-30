@@ -406,6 +406,30 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Fact_Mismui')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Assessment-2"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "fact",
+					"table": "MismuiFinal"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Pl_Orgchart')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -760,73 +784,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Admin')]",
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Clean_Admin')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Df_Clean_Employee')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "Assessment-1"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Ds_Sql_Users",
-								"type": "DatasetReference"
-							},
-							"name": "SqlEmployee"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Ds_Sql_Clean_Employee",
-								"type": "DatasetReference"
-							},
-							"name": "CleanData"
-						}
-					],
-					"transformations": [
-						{
-							"name": "alterRow1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          id as string,",
-						"          name as string,",
-						"          email as string,",
-						"          password as string,",
-						"          role as string,",
-						"          department as string,",
-						"          reportsTo as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> SqlEmployee",
-						"SqlEmployee alterRow(deleteIf(isNull(email))) ~> alterRow1",
-						"alterRow1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     recreate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> CleanData"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Users')]",
-				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Clean_Employee')]"
 			]
 		}
 	]
