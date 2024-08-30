@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "DF-Orgchart"
 		},
+		"Ls_MisumiRawData_connectionString": {
+			"value": ""
+		},
 		"Ls_MongoDb_Orgchart_connectionString": {
 			"value": ""
 		},

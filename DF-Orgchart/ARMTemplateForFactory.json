@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "DF-Orgchart"
 		},
+		"Ls_MisumiRawData_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Ls_MisumiRawData'"
+		},
 		"Ls_MongoDb_Orgchart_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Ls_MongoDb_Orgchart'"
@@ -107,13 +111,111 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "Preparation"
+					"name": "Assessment-1/Preparation"
 				},
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/Df_Clean_Admin')]",
 				"[concat(variables('factoryId'), '/dataflows/Df_Clean_Employee')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pl_CleanData_Mismui')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Dl_Clean_Mismui",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Assessment-2/Preparation"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Dl_Clean_Mismui')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pl_Dim_Dept')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Df_Dim_Dept",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Assessment-2/Preparation"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Df_Dim_Dept')]"
 			]
 		},
 		{
@@ -323,7 +425,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "Staging"
+					"name": "Assessment-1/Staging"
 				},
 				"annotations": [],
 				"lastPublishTime": "2024-08-28T09:55:21Z"
@@ -333,6 +435,218 @@
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Users')]",
 				"[concat(variables('factoryId'), '/datasets/Ds_Mongo_Admin')]",
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Admin')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pl_Products')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "drop table if exists raw.Products",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Ds_Misumi_Excel",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Ds_Mismui_Excel",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Assessment-2/Staging"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Ds_Misumi_Excel')]",
+				"[concat(variables('factoryId'), '/datasets/Ds_Mismui_Excel')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_CleanData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "prep",
+					"table": "MismuiCleanData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_Dim_Department')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "prep",
+					"table": "Department"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_Excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "raw",
+					"table": "Products"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_MisumSqlRawData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "raw",
+					"table": "MisumiProducts"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_MisumiRawData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_MisumiRawData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "products.csv",
+						"container": "assesment1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_MisumiRawData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Misumi_Excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_MisumiRawData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "products",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "products.xlsx",
+						"container": "assesment1"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_MisumiRawData')]"
 			]
 		},
 		{
@@ -460,6 +774,19 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Ls_MisumiRawData')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('Ls_MisumiRawData_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Ls_MongoDb_Orgchart')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -521,7 +848,11 @@
 							"name": "Cleandata"
 						}
 					],
-					"transformations": [],
+					"transformations": [
+						{
+							"name": "alterRow1"
+						}
+					],
 					"scriptLines": [
 						"source(output(",
 						"          id as string,",
@@ -533,7 +864,8 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> SqlAdmin",
-						"SqlAdmin sink(allowSchemaDrift: true,",
+						"SqlAdmin alterRow(deleteIf(isNull(email))) ~> alterRow1",
+						"alterRow1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -576,7 +908,11 @@
 							"name": "CleanData"
 						}
 					],
-					"transformations": [],
+					"transformations": [
+						{
+							"name": "alterRow1"
+						}
+					],
 					"scriptLines": [
 						"source(output(",
 						"          id as string,",
@@ -591,7 +927,8 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> SqlEmployee",
-						"SqlEmployee sink(allowSchemaDrift: true,",
+						"SqlEmployee alterRow(deleteIf(isNull(email))) ~> alterRow1",
+						"alterRow1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -607,6 +944,197 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Users')]",
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Clean_Employee')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Df_Dim_Dept')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Mismui_CleanData",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Mismui_Dim_Department",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						},
+						{
+							"name": "window1"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "select2"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          seriesCode as string,",
+						"          departmentCode as string,",
+						"          categoryCode as string,",
+						"          categoryName as string,",
+						"          searchCategoryCode as string,",
+						"          seriesName as string,",
+						"          brandCode as string,",
+						"          brandUrlCode as string,",
+						"          brandName as string,",
+						"          seriesStatus as string,",
+						"          catchCopy as string,",
+						"          minStandardDaysToShip as string,",
+						"          maxStandardDaysToShip as string,",
+						"          directCartType as string,",
+						"          priceCheckLessFlag as string,",
+						"          minStandardUnitPrice as double,",
+						"          maxStandardUnitPrice as double,",
+						"          minPricePerPiece as string,",
+						"          maxPricePerPiece as string,",
+						"          recommendFlag as string,",
+						"          volumeDiscountFlag as string,",
+						"          cValueFlag as string,",
+						"          stockItemFlag as string,",
+						"          displayStandardPriceFlag as string,",
+						"          discontinuedProductFlag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 select(mapColumn(",
+						"          departmentCode",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"aggregate1 window(asc(departmentCode, true),",
+						"     Id = rowNumber()) ~> window1",
+						"select1 aggregate(groupBy(departmentCode),",
+						"     count = count()) ~> aggregate1",
+						"window1 select(mapColumn(",
+						"          departmentCode,",
+						"          Id",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Ds_Mismui_CleanData')]",
+				"[concat(variables('factoryId'), '/datasets/Ds_Mismui_Dim_Department')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Dl_Clean_Mismui')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Mismui_Excel",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Mismui_CleanData",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          departmentCode as string,",
+						"          categoryCode as string,",
+						"          categoryName as string,",
+						"          searchCategoryCode as string,",
+						"          seriesCode as string,",
+						"          seriesName as string,",
+						"          brandCode as string,",
+						"          brandUrlCode as string,",
+						"          brandName as string,",
+						"          seriesStatus as string,",
+						"          catchCopy as string,",
+						"          minStandardDaysToShip as string,",
+						"          maxStandardDaysToShip as string,",
+						"          directCartType as string,",
+						"          priceCheckLessFlag as string,",
+						"          minStandardUnitPrice as double,",
+						"          maxStandardUnitPrice as double,",
+						"          minPricePerPiece as string,",
+						"          maxPricePerPiece as string,",
+						"          recommendFlag as string,",
+						"          volumeDiscountFlag as string,",
+						"          cValueFlag as string,",
+						"          stockItemFlag as string,",
+						"          displayStandardPriceFlag as string,",
+						"          discontinuedProductFlag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 aggregate(groupBy(seriesCode),",
+						"     each(match(name!='seriesCode'), $$ = first($$))) ~> aggregate1",
+						"aggregate1 derive(minStandardUnitPrice = iifNull(minStandardUnitPrice, 0, minStandardUnitPrice),",
+						"          maxStandardUnitPrice = iifNull(maxStandardUnitPrice, 0, maxStandardUnitPrice)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Ds_Mismui_Excel')]",
+				"[concat(variables('factoryId'), '/datasets/Ds_Mismui_CleanData')]"
 			]
 		}
 	]
