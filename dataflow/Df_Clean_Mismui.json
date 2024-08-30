@@ -8,10 +8,6 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "Ds_Mismui_Excel",
-						"type": "DatasetReference"
-					},
 					"name": "source1"
 				}
 			],
@@ -64,9 +60,7 @@
 				"          discontinuedProductFlag as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
+				"     validateSchema: false) ~> source1",
 				"source1 aggregate(groupBy(seriesCode),",
 				"     each(match(name!='seriesCode'), $$ = first($$))) ~> aggregate1",
 				"aggregate1 derive(minStandardUnitPrice = iifNull(minStandardUnitPrice, 0, minStandardUnitPrice),",
