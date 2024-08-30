@@ -1,0 +1,96 @@
+{
+	"name": "Df_Fact",
+	"properties": {
+		"folder": {
+			"name": "Assessment-2"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Mismui_CleanData",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Fact_Mismui",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          seriesCode as string,",
+				"          departmentCode as string,",
+				"          categoryCode as string,",
+				"          categoryName as string,",
+				"          seriesName as string,",
+				"          brandCode as string,",
+				"          brandUrlCode as string,",
+				"          brandName as string,",
+				"          seriesStatus as string,",
+				"          catchCopy as string,",
+				"          minStandardDaysToShip as string,",
+				"          maxStandardDaysToShip as string,",
+				"          directCartType as string,",
+				"          priceCheckLessFlag as string,",
+				"          minStandardUnitPrice as double,",
+				"          maxStandardUnitPrice as double,",
+				"          minPricePerPiece as string,",
+				"          maxPricePerPiece as string,",
+				"          recommendFlag as string,",
+				"          volumeDiscountFlag as string,",
+				"          cValueFlag as string,",
+				"          stockItemFlag as string,",
+				"          displayStandardPriceFlag as string,",
+				"          discontinuedProductFlag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 select(mapColumn(",
+				"          seriesCode,",
+				"          departmentCode,",
+				"          categoryCode,",
+				"          categoryName,",
+				"          seriesName,",
+				"          brandCode,",
+				"          brandName,",
+				"          seriesStatus,",
+				"          catchCopy,",
+				"          minStandardDaysToShip,",
+				"          maxStandardDaysToShip,",
+				"          minStandardUnitPrice,",
+				"          maxStandardUnitPrice,",
+				"          minPricePerPiece,",
+				"          maxPricePerPiece",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

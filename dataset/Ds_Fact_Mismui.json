@@ -1,0 +1,19 @@
+{
+	"name": "Ds_Fact_Mismui",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_SqlDB_Organizationchart",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Assessment-2"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "fact",
+			"table": "MismuiFinal"
+		}
+	}
+}
