@@ -1,5 +1,5 @@
 {
-	"name": "Pl_CleanData_Mismui",
+	"name": "Pl_Dim_Dept",
 	"properties": {
 		"activities": [
 			{
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Dl_Clean_Mismui",
+						"referenceName": "Df_Dim_Dept",
 						"type": "DataFlowReference"
 					},
 					"compute": {

@@ -1,0 +1,16 @@
+{
+	"name": "Ds_Mismui_Dim_Department",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_SqlDB_Organizationchart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "prep",
+			"table": "Department"
+		}
+	}
+}
