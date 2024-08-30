@@ -91,7 +91,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_CleanData')]",
+			"name": "[concat(parameters('factoryName'), '/Ds_Fact_Mismui')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -106,8 +106,8 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "prep",
-					"table": "MismuiCleanData"
+					"schema": "fact",
+					"table": "MismuiFinal"
 				}
 			},
 			"dependsOn": [
@@ -115,31 +115,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_Dim_Department')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Ls_SqlDB_Organizationchart",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Assessment-2"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "prep",
-					"table": "Department"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_Excel')]",
+			"name": "[concat(parameters('factoryName'), '/Ds_MisumiSqlRawData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -163,7 +139,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Ds_MisumSqlRawData')]",
+			"name": "[concat(parameters('factoryName'), '/Ds_Misumi_CleanData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -178,8 +154,80 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "raw",
-					"table": "MisumiProducts"
+					"schema": "prep",
+					"table": "MismuiCleanData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Misumi_Dim_Brand')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Assessment-2"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "prep",
+					"table": "DimBrand"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Misumi_Dim_Cat')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Assessment-2"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "prep",
+					"table": "DimCat"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ds_Misumi_Dim_Department')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_SqlDB_Organizationchart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Assessment-2"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "prep",
+					"table": "Department"
 				}
 			},
 			"dependsOn": [
@@ -351,78 +399,6 @@
 				"typeProperties": {
 					"schema": "raw",
 					"table": "employees"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_Dim_Cat')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Ls_SqlDB_Organizationchart",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Assessment-2"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "prep",
-					"table": "DimCat"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Ds_Mismui_Dim_Brand')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Ls_SqlDB_Organizationchart",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Assessment-2"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "prep",
-					"table": "DimBrand"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Ls_SqlDB_Organizationchart')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Ds_Fact_Mismui')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Ls_SqlDB_Organizationchart",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Assessment-2"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "fact",
-					"table": "MismuiFinal"
 				}
 			},
 			"dependsOn": [
@@ -702,7 +678,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Ds_Mismui_Excel",
+								"referenceName": "Ds_MisumiSqlRawData",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -719,7 +695,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Ds_Misumi_Excel')]",
-				"[concat(variables('factoryId'), '/datasets/Ds_Mismui_Excel')]"
+				"[concat(variables('factoryId'), '/datasets/Ds_MisumiSqlRawData')]"
 			]
 		},
 		{
@@ -784,6 +760,73 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Admin')]",
 				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Clean_Admin')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Df_Clean_Employee')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Assessment-1"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Sql_Users",
+								"type": "DatasetReference"
+							},
+							"name": "SqlEmployee"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Sql_Clean_Employee",
+								"type": "DatasetReference"
+							},
+							"name": "CleanData"
+						}
+					],
+					"transformations": [
+						{
+							"name": "alterRow1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          name as string,",
+						"          email as string,",
+						"          password as string,",
+						"          role as string,",
+						"          department as string,",
+						"          reportsTo as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> SqlEmployee",
+						"SqlEmployee alterRow(deleteIf(isNull(email))) ~> alterRow1",
+						"alterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> CleanData"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Users')]",
+				"[concat(variables('factoryId'), '/datasets/Ds_Sql_Clean_Employee')]"
 			]
 		}
 	]

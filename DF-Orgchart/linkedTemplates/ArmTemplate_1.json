@@ -13,71 +13,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/Df_Clean_Employee')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "Assessment-1"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Ds_Sql_Users",
-								"type": "DatasetReference"
-							},
-							"name": "SqlEmployee"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Ds_Sql_Clean_Employee",
-								"type": "DatasetReference"
-							},
-							"name": "CleanData"
-						}
-					],
-					"transformations": [
-						{
-							"name": "alterRow1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          id as string,",
-						"          name as string,",
-						"          email as string,",
-						"          password as string,",
-						"          role as string,",
-						"          department as string,",
-						"          reportsTo as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> SqlEmployee",
-						"SqlEmployee alterRow(deleteIf(isNull(email))) ~> alterRow1",
-						"alterRow1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     recreate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> CleanData"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Df_Dim_Dept')]",
+			"name": "[concat(parameters('factoryName'), '/Df_Clean_Misumi')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -89,7 +25,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_CleanData",
+								"referenceName": "Ds_MisumiSqlRawData",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -98,112 +34,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_Dim_Department",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "select1"
-						},
-						{
-							"name": "window1"
-						},
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "select2"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          seriesCode as string,",
-						"          departmentCode as string,",
-						"          categoryCode as string,",
-						"          categoryName as string,",
-						"          searchCategoryCode as string,",
-						"          seriesName as string,",
-						"          brandCode as string,",
-						"          brandUrlCode as string,",
-						"          brandName as string,",
-						"          seriesStatus as string,",
-						"          catchCopy as string,",
-						"          minStandardDaysToShip as string,",
-						"          maxStandardDaysToShip as string,",
-						"          directCartType as string,",
-						"          priceCheckLessFlag as string,",
-						"          minStandardUnitPrice as double,",
-						"          maxStandardUnitPrice as double,",
-						"          minPricePerPiece as string,",
-						"          maxPricePerPiece as string,",
-						"          recommendFlag as string,",
-						"          volumeDiscountFlag as string,",
-						"          cValueFlag as string,",
-						"          stockItemFlag as string,",
-						"          displayStandardPriceFlag as string,",
-						"          discontinuedProductFlag as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> source1",
-						"source1 select(mapColumn(",
-						"          departmentCode",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"aggregate1 window(asc(departmentCode, true),",
-						"     Id = rowNumber()) ~> window1",
-						"select1 aggregate(groupBy(departmentCode),",
-						"     count = count()) ~> aggregate1",
-						"window1 select(mapColumn(",
-						"          departmentCode,",
-						"          Id",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select2",
-						"select2 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     recreate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Df_Clean_Mismui')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "Assessment-2"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Ds_Mismui_Excel",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Ds_Mismui_CleanData",
+								"referenceName": "Ds_Misumi_CleanData",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -239,8 +70,8 @@
 						"          priceCheckLessFlag as string,",
 						"          minStandardUnitPrice as double,",
 						"          maxStandardUnitPrice as double,",
-						"          minPricePerPiece as string,",
-						"          maxPricePerPiece as string,",
+						"          minPricePerPiece as double,",
+						"          maxPricePerPiece as double,",
 						"          recommendFlag as string,",
 						"          volumeDiscountFlag as string,",
 						"          cValueFlag as string,",
@@ -255,7 +86,9 @@
 						"source1 aggregate(groupBy(seriesCode),",
 						"     each(match(name!='seriesCode'), $$ = first($$))) ~> aggregate1",
 						"aggregate1 derive(minStandardUnitPrice = iifNull(minStandardUnitPrice, 0, minStandardUnitPrice),",
-						"          maxStandardUnitPrice = iifNull(maxStandardUnitPrice, 0, maxStandardUnitPrice)) ~> derivedColumn1",
+						"          maxStandardUnitPrice = iifNull(maxStandardUnitPrice, 0, maxStandardUnitPrice),",
+						"          minPricePerPiece = iifNull(minPricePerPiece, 0, minPricePerPiece),",
+						"          maxPricePerPiece = iifNull(maxPricePerPiece, 0, maxPricePerPiece)) ~> derivedColumn1",
 						"derivedColumn1 select(mapColumn(",
 						"          seriesCode,",
 						"          departmentCode,",
@@ -301,6 +134,110 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Df_Dim_Brand')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Assessment-2"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Misumi_CleanData",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Ds_Misumi_Dim_Brand",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "select2"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          seriesCode as string,",
+						"          departmentCode as string,",
+						"          categoryCode as string,",
+						"          categoryName as string,",
+						"          seriesName as string,",
+						"          brandCode as string,",
+						"          brandUrlCode as string,",
+						"          brandName as string,",
+						"          seriesStatus as string,",
+						"          catchCopy as string,",
+						"          minStandardDaysToShip as string,",
+						"          maxStandardDaysToShip as string,",
+						"          directCartType as string,",
+						"          priceCheckLessFlag as string,",
+						"          minStandardUnitPrice as double,",
+						"          maxStandardUnitPrice as double,",
+						"          minPricePerPiece as string,",
+						"          maxPricePerPiece as string,",
+						"          recommendFlag as string,",
+						"          volumeDiscountFlag as string,",
+						"          cValueFlag as string,",
+						"          stockItemFlag as string,",
+						"          displayStandardPriceFlag as string,",
+						"          discontinuedProductFlag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 select(mapColumn(",
+						"          brandCode,",
+						"          brandUrlCode,",
+						"          brandName",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 aggregate(groupBy(brandCode,",
+						"          brandUrlCode,",
+						"          brandName),",
+						"     Count = count()) ~> aggregate1",
+						"aggregate1 select(mapColumn(",
+						"          brandCode,",
+						"          brandUrlCode,",
+						"          brandName",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Df_Dim_Cat')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -313,7 +250,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_CleanData",
+								"referenceName": "Ds_Misumi_CleanData",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -322,7 +259,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_Dim_Cat",
+								"referenceName": "Ds_Misumi_Dim_Cat",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -407,7 +344,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Df_Dim_Brand')]",
+			"name": "[concat(parameters('factoryName'), '/Df_Dim_Dept')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -419,7 +356,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_CleanData",
+								"referenceName": "Ds_Misumi_CleanData",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -428,7 +365,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_Dim_Brand",
+								"referenceName": "Ds_Misumi_Dim_Department",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -437,6 +374,9 @@
 					"transformations": [
 						{
 							"name": "select1"
+						},
+						{
+							"name": "window1"
 						},
 						{
 							"name": "aggregate1"
@@ -451,6 +391,7 @@
 						"          departmentCode as string,",
 						"          categoryCode as string,",
 						"          categoryName as string,",
+						"          searchCategoryCode as string,",
 						"          seriesName as string,",
 						"          brandCode as string,",
 						"          brandUrlCode as string,",
@@ -477,20 +418,17 @@
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> source1",
 						"source1 select(mapColumn(",
-						"          brandCode,",
-						"          brandUrlCode,",
-						"          brandName",
+						"          departmentCode",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 aggregate(groupBy(brandCode,",
-						"          brandUrlCode,",
-						"          brandName),",
-						"     Count = count()) ~> aggregate1",
-						"aggregate1 select(mapColumn(",
-						"          brandCode,",
-						"          brandUrlCode,",
-						"          brandName",
+						"aggregate1 window(asc(departmentCode, true),",
+						"     Id = rowNumber()) ~> window1",
+						"select1 aggregate(groupBy(departmentCode),",
+						"     count = count()) ~> aggregate1",
+						"window1 select(mapColumn(",
+						"          departmentCode,",
+						"          Id",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select2",
@@ -523,7 +461,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Ds_Mismui_CleanData",
+								"referenceName": "Ds_Misumi_CleanData",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -684,12 +622,10 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Df_Clean_Employee')]"
-			]
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Pl_CleanData_Mismui')]",
+			"name": "[concat(parameters('factoryName'), '/Pl_CleanData_Misumi')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -708,7 +644,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Df_Clean_Mismui",
+								"referenceName": "Df_Clean_Misumi",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -734,17 +670,17 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Df_Clean_Mismui')]"
+				"[concat(variables('factoryId'), '/dataflows/Df_Clean_Misumi')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Pl_Dim_Dept')]",
+			"name": "[concat(parameters('factoryName'), '/Pl_Dim_Brand')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Data flow1",
+						"name": "Pl_Dim_brand",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -757,7 +693,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Df_Dim_Dept",
+								"referenceName": "Df_Dim_Brand",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -783,7 +719,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Df_Dim_Dept')]"
+				"[concat(variables('factoryId'), '/dataflows/Df_Dim_Brand')]"
 			]
 		},
 		{
@@ -836,13 +772,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Pl_Dim_Brand')]",
+			"name": "[concat(parameters('factoryName'), '/Pl_Dim_Dept')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Pl_Dim_brand",
+						"name": "Data flow1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -855,7 +791,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Df_Dim_Brand",
+								"referenceName": "Df_Dim_Dept",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -881,7 +817,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Df_Dim_Brand')]"
+				"[concat(variables('factoryId'), '/dataflows/Df_Dim_Dept')]"
 			]
 		},
 		{
