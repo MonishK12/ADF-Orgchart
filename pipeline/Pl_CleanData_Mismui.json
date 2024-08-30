@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Dl_Clean_Mismui",
+						"referenceName": "Df_Clean_Mismui",
 						"type": "DataFlowReference"
 					},
 					"compute": {

@@ -1,6 +1,9 @@
 {
 	"name": "Df_Clean_Employee",
 	"properties": {
+		"folder": {
+			"name": "Assessment-1"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

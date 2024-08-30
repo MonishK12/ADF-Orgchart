@@ -1,6 +1,9 @@
 {
-	"name": "Dl_Clean_Mismui",
+	"name": "Df_Clean_Mismui",
 	"properties": {
+		"folder": {
+			"name": "Assessment-2"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

@@ -1,6 +1,9 @@
 {
 	"name": "Df_Dim_Brand",
 	"properties": {
+		"folder": {
+			"name": "Assessment-2"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
