@@ -1,12 +1,12 @@
 {
-	"name": "Dl_Clean_Mismui",
+	"name": "Df_Dim_Cat",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Ds_Mismui_Excel",
+						"referenceName": "Ds_Mismui_CleanData",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Ds_Mismui_CleanData",
+						"referenceName": "Ds_Mismui_Dim_Cat",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -23,22 +23,24 @@
 			],
 			"transformations": [
 				{
+					"name": "select1"
+				},
+				{
 					"name": "aggregate1"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "select2"
 				},
 				{
-					"name": "select1"
+					"name": "window1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
+				"          seriesCode as string,",
 				"          departmentCode as string,",
 				"          categoryCode as string,",
 				"          categoryName as string,",
-				"          searchCategoryCode as string,",
-				"          seriesCode as string,",
 				"          seriesName as string,",
 				"          brandCode as string,",
 				"          brandUrlCode as string,",
@@ -64,39 +66,24 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 aggregate(groupBy(seriesCode),",
-				"     each(match(name!='seriesCode'), $$ = first($$))) ~> aggregate1",
-				"aggregate1 derive(minStandardUnitPrice = iifNull(minStandardUnitPrice, 0, minStandardUnitPrice),",
-				"          maxStandardUnitPrice = iifNull(maxStandardUnitPrice, 0, maxStandardUnitPrice)) ~> derivedColumn1",
-				"derivedColumn1 select(mapColumn(",
-				"          seriesCode,",
-				"          departmentCode,",
+				"source1 select(mapColumn(",
 				"          categoryCode,",
-				"          categoryName,",
-				"          seriesName,",
-				"          brandCode,",
-				"          brandUrlCode,",
-				"          brandName,",
-				"          seriesStatus,",
-				"          catchCopy,",
-				"          minStandardDaysToShip,",
-				"          maxStandardDaysToShip,",
-				"          directCartType,",
-				"          priceCheckLessFlag,",
-				"          minStandardUnitPrice,",
-				"          maxStandardUnitPrice,",
-				"          minPricePerPiece,",
-				"          maxPricePerPiece,",
-				"          recommendFlag,",
-				"          volumeDiscountFlag,",
-				"          cValueFlag,",
-				"          stockItemFlag,",
-				"          displayStandardPriceFlag,",
-				"          discontinuedProductFlag",
+				"          categoryName",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"select1 aggregate(groupBy(categoryCode,",
+				"          categoryName),",
+				"     count = count()) ~> aggregate1",
+				"aggregate1 select(mapColumn(",
+				"          categoryCode,",
+				"          categoryName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 window(asc(categoryCode, true),",
+				"     Id = rowNumber()) ~> window1",
+				"window1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",

@@ -5,6 +5,9 @@
 			"referenceName": "Ls_MisumiRawData",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Assessment-2"
+		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {

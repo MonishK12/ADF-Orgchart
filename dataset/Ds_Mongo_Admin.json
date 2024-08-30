@@ -5,6 +5,9 @@
 			"referenceName": "Ls_MongoDb_Orgchart",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Assessment-1"
+		},
 		"annotations": [],
 		"type": "MongoDbAtlasCollection",
 		"schema": [],

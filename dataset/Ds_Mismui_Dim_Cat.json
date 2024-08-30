@@ -1,20 +1,19 @@
 {
-	"name": "Ds_Sql_Admin",
+	"name": "Ds_Mismui_Dim_Cat",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Ls_SqlDB_Organizationchart",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "Assessment-1"
+			"name": "Assessment-2"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
-			"table": "admin"
+			"schema": "prep",
+			"table": "DimCat"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }

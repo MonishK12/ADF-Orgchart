@@ -1,20 +1,16 @@
 {
-	"name": "Ds_Sql_Admin",
+	"name": "Ds_Mismui_Dim_Brand",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Ls_SqlDB_Organizationchart",
 			"type": "LinkedServiceReference"
 		},
-		"folder": {
-			"name": "Assessment-1"
-		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
-			"table": "admin"
+			"schema": "prep",
+			"table": "DimBrand"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }
